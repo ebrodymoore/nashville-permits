@@ -50,8 +50,17 @@ def fetch_permits(start: date, end: date) -> list[dict]:
     """Return all 'Building Residential - New' permits entered in [start, end] inclusive."""
     end_exclusive = end + timedelta(days=1)
     # ArcGIS requires TIMESTAMP literal format; dates are stored in local Nashville time
+    subtypes = (
+        "Single Family Residence",
+        "Multifamily, Townhome",
+        "Multifamily, Tri-Plex, Quad, Apartments",
+    )
+    subtype_filter = " OR ".join(
+        f"Permit_Subtype_Description='{s}'" for s in subtypes
+    )
     where = (
         f"Permit_Type_Description='Building Residential - New' "
+        f"AND ({subtype_filter}) "
         f"AND Date_Entered >= TIMESTAMP '{start} 00:00:00' "
         f"AND Date_Entered < TIMESTAMP '{end_exclusive} 00:00:00'"
     )
@@ -167,7 +176,9 @@ def print_permit(r: dict, idx: int, total: int) -> None:
     print(sep)
     print(f"  Address:       {r['address']}")
     print(f"  Contact:       {r['contact']}")
-    print(f"  Purpose:       {r['purpose']}")
+    # Split on period followed by space or end-of-string, not on decimals (e.g. "2.5 bath")
+    first_sentence = (re.split(r'\.(?:\s|$)', r['purpose'])[0] + '.').strip() if r['purpose'] else ''
+    print(f"  Purpose:       {first_sentence}")
     print(f"  Date Entered:  {r['date_entered']}")
     if r['date_issued'] != 'N/A':
         print(f"  Date Issued:   {r['date_issued']}")

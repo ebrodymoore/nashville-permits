@@ -1,0 +1,72 @@
+Nashville Permits Tool — Setup Instructions
+============================================
+
+Follow these steps ONE TIME to get set up. After that, you only need the
+last step each day.
+
+
+STEP 1 — Install Homebrew
+--------------------------
+Homebrew is a tool that lets your Mac install software from the terminal.
+
+1. Open Terminal (press Command + Space, type Terminal, hit Enter)
+2. Paste this entire line and press Enter:
+
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+3. It will ask for your Mac password — type it (nothing shows on screen,
+   that's normal) and press Enter
+4. Wait for it to finish — it takes a few minutes
+
+
+STEP 2 — Install Python
+------------------------
+Paste this line and press Enter:
+
+   brew install python
+
+Wait for it to finish.
+
+
+STEP 3 — Install the required Python packages
+----------------------------------------------
+Paste this and press Enter:
+
+   pip3 install requests beautifulsoup4 ddgs --break-system-packages
+
+
+STEP 4 — Download the tool
+---------------------------
+Paste this and press Enter:
+
+   curl -o ~/Desktop/nashville_permits.py "https://raw.githubusercontent.com/ebrodymoore/nashville-permits/main/nashville_permits.py"
+
+This saves the tool to your Desktop.
+
+
+STEP 5 — Run it
+----------------
+Every day when you want to see yesterday's new residential permits, open
+Terminal and paste:
+
+   python3 ~/Desktop/nashville_permits.py
+
+Press Enter. It will print each permit with the contractor's phone number,
+email, and website (when findable).
+
+
+OPTIONAL: Look up a specific date
+-----------------------------------
+   python3 ~/Desktop/nashville_permits.py --date 2026-03-07
+
+
+OPTIONAL: Look up a date range
+--------------------------------
+   python3 ~/Desktop/nashville_permits.py --start 2026-03-01 --end 2026-03-09
+
+
+If something goes wrong
+------------------------
+- "command not found" after the Homebrew step — close Terminal, reopen it,
+  and try Step 2 again
+- Any other error — take a screenshot and send it over
